@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini LinkedIn – Sign In</title>
+  <meta name="description" content="Sign in to Mini LinkedIn – Connect with professionals, share posts, and grow your network with AI-powered features." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            linkedin: { 50:'#e8f1fb', 100:'#c5dcf4', 200:'#9fc5ec', 300:'#70aae2', 400:'#4a95da', 500:'#0a66c2', 600:'#084e96', 700:'#063b72', 800:'#04284d', 900:'#021629' },
+            dark: { 800:'#1d2226', 900:'#000000' }
+          },
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
+    .gradient-bg { background: linear-gradient(135deg, #0a66c2 0%, #004182 40%, #001d3d 100%); }
+    .input-glow:focus { box-shadow: 0 0 0 3px rgba(10, 102, 194, 0.3); }
+    .btn-shine { position: relative; overflow: hidden; }
+    .btn-shine::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%); transition: all 0.6s; }
+    .btn-shine:hover::after { left: 100%; }
+    .float-up { animation: floatUp 0.5s ease-out; }
+    @keyframes floatUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .particle { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.08); animation: drift 20s infinite linear; }
+    @keyframes drift { 0%,100% { transform: translateY(0) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; } }
+  </style>
+</head>
+<body class="gradient-bg min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+  <!-- Floating particles -->
+  <div class="particle w-2 h-2" style="left:10%;top:90%;animation-delay:0s;animation-duration:18s"></div>
+  <div class="particle w-3 h-3" style="left:25%;top:95%;animation-delay:3s;animation-duration:22s"></div>
+  <div class="particle w-1.5 h-1.5" style="left:50%;top:100%;animation-delay:6s;animation-duration:16s"></div>
+  <div class="particle w-2 h-2" style="left:70%;top:92%;animation-delay:9s;animation-duration:20s"></div>
+  <div class="particle w-3.5 h-3.5" style="left:85%;top:88%;animation-delay:12s;animation-duration:25s"></div>
+  <div class="particle w-1 h-1" style="left:40%;top:96%;animation-delay:4s;animation-duration:15s"></div>
+
+  <div class="w-full max-w-md relative z-10 float-up">
+    <!-- Logo -->
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/10 backdrop-blur mb-4">
+        <svg class="w-9 h-9 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14m-.5 15.5v-5.3a3.26 3.26 0 00-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 011.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 001.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 00-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+      </div>
+      <h1 class="text-3xl font-bold text-white mb-1">Mini LinkedIn</h1>
+      <p class="text-blue-200/70 text-sm">AI-powered professional networking</p>
+    </div>
+
+    <!-- Error message -->
+    <div id="errorMsg" class="hidden mb-4 p-3 rounded-xl bg-red-500/20 border border-red-400/30 text-red-200 text-sm text-center backdrop-blur"></div>
+
+    <!-- Login Panel -->
+    <div id="loginPanel" class="glass rounded-2xl p-8">
+      <h2 class="text-xl font-semibold text-white mb-1">Welcome back</h2>
+      <p class="text-blue-200/60 text-sm mb-6">Sign in to your account</p>
+
+      <form id="loginForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-blue-100/80 mb-1.5">Email</label>
+          <input id="loginEmail" type="email" required placeholder="you@example.com"
+            class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/10 text-white placeholder-white/30 text-sm input-glow focus:outline-none focus:border-blue-400/50 transition-all" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-blue-100/80 mb-1.5">Password</label>
+          <input id="loginPassword" type="password" required placeholder="••••••••"
+            class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/10 text-white placeholder-white/30 text-sm input-glow focus:outline-none focus:border-blue-400/50 transition-all" />
+        </div>
+        <button type="submit"
+          class="w-full py-3 rounded-xl bg-blue-500 hover:bg-blue-400 text-white font-semibold text-sm btn-shine transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25">
+          Sign In
+        </button>
+      </form>
+
+      <p class="text-center text-sm text-blue-200/50 mt-6">
+        Don't have an account? <a href="#" id="showSignup" class="text-blue-300 hover:text-white transition-colors font-medium">Sign up</a>
+      </p>
+    </div>
+
+    <!-- Signup Panel -->
+    <div id="signupPanel" class="glass rounded-2xl p-8 hidden">
+      <h2 class="text-xl font-semibold text-white mb-1">Create account</h2>
+      <p class="text-blue-200/60 text-sm mb-6">Join the professional network</p>
+
+      <form id="signupForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-blue-100/80 mb-1.5">Full Name</label>
+          <input id="signupName" type="text" required placeholder="John Doe"
+            class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/10 text-white placeholder-white/30 text-sm input-glow focus:outline-none focus:border-blue-400/50 transition-all" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-blue-100/80 mb-1.5">Email</label>
+          <input id="signupEmail" type="email" required placeholder="you@example.com"
+            class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/10 text-white placeholder-white/30 text-sm input-glow focus:outline-none focus:border-blue-400/50 transition-all" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-blue-100/80 mb-1.5">Password</label>
+          <input id="signupPassword" type="password" required placeholder="Min 6 characters"
+            class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/10 text-white placeholder-white/30 text-sm input-glow focus:outline-none focus:border-blue-400/50 transition-all" />
+        </div>
+        <button type="submit"
+          class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white font-semibold text-sm btn-shine transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/25">
+          Create Account
+        </button>
+      </form>
+
+      <p class="text-center text-sm text-blue-200/50 mt-6">
+        Already have an account? <a href="#" id="showLogin" class="text-blue-300 hover:text-white transition-colors font-medium">Sign in</a>
+      </p>
+    </div>
+
+    <p class="text-center text-xs text-blue-200/30 mt-6">Built with ❤️ using Firebase, Groq AI &amp; MongoDB</p>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>
